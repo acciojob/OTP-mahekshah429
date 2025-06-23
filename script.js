@@ -1,35 +1,28 @@
-const inputs = document.querySelectorAll('.code');
+const inputs = document.querySelectorAll(".code");
 
-inputs[0].focus();
+inputs[0].focus(); // Focus first input on page load
 
-inputs.forEach((input, idx) => {
-  input.addEventListener('input', () => {
-    const val = input.value;
-
-    if (val) {
-      // Only allow numbers
-      if (!/^\d$/.test(val)) {
-        input.value = '';
-        return;
-      }
-
-      if (idx < inputs.length - 1) {
-        inputs[idx + 1].focus();
-      }
+inputs.forEach((input, index) => {
+  input.addEventListener("keydown", (e) => {
+    if (e.key >= 0 && e.key <= 9) {
+      input.value = ""; // Clear before entering new value
+      setTimeout(() => {
+        if (index < inputs.length - 1) {
+          inputs[index + 1].focus();
+        }
+      }, 10);
+    } else if (e.key === "Backspace") {
+      input.value = "";
+      setTimeout(() => {
+        if (index > 0) {
+          inputs[index - 1].focus();
+        }
+      }, 10);
     }
   });
 
-  input.addEventListener('keydown', (e) => {
-    if (e.key === 'Backspace') {
-      if (input.value === '') {
-        if (idx > 0) {
-          inputs[idx - 1].focus();
-        }
-      } else {
-        input.value = '';
-      }
-    } else if (e.key >= 0 && e.key <= 9) {
-      input.value = ''; // So user can overwrite digit easily
-    }
+  input.addEventListener("input", () => {
+    // Prevent more than 1 character
+    input.value = input.value.slice(0, 1);
   });
 });
